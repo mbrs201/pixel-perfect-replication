@@ -1,4 +1,4 @@
-name: Deploy React app to GitHub Pages
+name: Deploy static content to Pages
 
 on:
   push:
@@ -20,25 +20,39 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version: 20
-          cache: npm
+          bun-version: latest
 
       - name: Install dependencies
-        run: npm ci
+        run: bun install --frozen-lockfile
 
       - name: Build
-        run: npm run build
+        run: bun run build
 
-      # Fixes 404 on refresh/direct links when using React Router (BrowserRouter)
-      # Change "dist" to "build" if you use Create React App
+      # Finds the folder that actually contains index.html.
+      # If none has one, the build is not in static/SPA mode yet and we fail loudly.
+      - name: Locate build output
+        id: out
+        run: |
+          for d in .output/public dist/client dist; do
+            if [ -f "$d/index.html" ]; then
+              echo "dir=$d" >> "$GITHUB_OUTPUT"
+              echo "Using output folder: $d"
+              exit 0
+            fi
+          done
+          echo "::error::No index.html found after build. Enable TanStack Start SPA mode in vite.config.ts."
+          ls -R .output dist 2>/dev/null | head -60 || true
+          exit 1
+
+      # Lets direct links and page refreshes work on GitHub Pages
       - name: SPA fallback
-        run: cp dist/index.html dist/404.html
+        run: cp "${{ steps.out.outputs.dir }}/index.html" "${{ steps.out.outputs.dir }}/404.html"
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist   # use "build" for Create React App
+          path: ${{ steps.out.outputs.dir }}
 
   deploy:
     needs: build
