@@ -102,7 +102,7 @@ function Hero() {
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-accent/50 px-3 py-1 text-xs text-accent-foreground">
               <span className="h-2 w-2 animate-pulse rounded-full bg-primary" />{t(d.hero.badge)}
             </span>
-            <span className="rounded-full border border-border px-3 py-1 font-mono text-xs text-muted-foreground">📍 {t(d.hero.location)}</span>
+            <span className="rounded-full border border-border px-3 py-1 font-mono text-xs text-muted-foreground">◉ {t(d.hero.location)}</span>
           </div>
           <p className="mt-8 font-mono text-sm text-primary">Mohammed Bourass</p>
           <h1 className="mt-2 text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">{t(d.hero.title)}</h1>
