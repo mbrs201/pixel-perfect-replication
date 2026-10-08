@@ -141,22 +141,13 @@ export const repos: Record<"mobile" | "desktop" | "web" | "practice", Repo[]> = 
   ],
 };
 
-export const videos: { title: L; id?: string }[] = [
-  { title: { en: "Adams-Gam (my own game)", fr: "Adams-Gam (mon propre jeu)", ar: "Adams-Gam (لعبتي الخاصة)" }, id: "3fZsNSxJ6xM" },
-  { title: same("Flappy Bird"), id: "V23unpcyDY8" },
-  { title: { en: "Memory Game", fr: "Jeu de mémoire", ar: "لعبة الذاكرة" }, id: "UQdkF2J5DSc" },
-  { title: { en: "Hotel Management (C# + DB)", fr: "Gestion hôtelière (C# + BD)", ar: "إدارة فندق (C# + قاعدة بيانات)" }, id: "8EpKYSu8Wtc" },
-  { title: { en: "Airport Management System", fr: "Gestion d'aéroport", ar: "نظام إدارة المطار" }, id: "rftQBow6OWc" },
-  { title: { en: "Bank & ATM console systems (C++)", fr: "Systèmes Banque & ATM console (C++)", ar: "أنظمة البنك والصراف (C++)" } },
-];
-
 export const timeline: { date: L; title: L; text?: L }[] = [
   { date: same("2022"), title: { en: "Baccalaureate", fr: "Baccalauréat", ar: "البكالوريا" } },
   { date: same("09/2022"), title: { en: "Enters ENSA", fr: "Entrée à l'ENSA", ar: "الالتحاق بـ ENSA" } },
   { date: { en: "Late 2022", fr: "Fin 2022", ar: "أواخر 2022" }, title: { en: "Self-learning begins", fr: "Début de l'autoformation", ar: "بداية التعلم الذاتي" }, text: { en: "Discovers the preparatory years; starts with algorithms on paper.", fr: "Découvre les années préparatoires ; commence par des algorithmes sur papier.", ar: "اكتشاف السنوات التحضيرية؛ البدء بالخوارزميات على الورق." } },
   { date: same("01/2023"), title: { en: "C basics", fr: "Bases du C", ar: "أساسيات C" }, text: { en: "Loops, conditions, small exercises like drawing triangles, via YouTube.", fr: "Boucles, conditions, petits exercices comme dessiner des triangles, via YouTube.", ar: "الحلقات والشروط وتمارين صغيرة مثل رسم المثلثات عبر يوتيوب." } },
   { date: same("03/2023"), title: { en: "A real roadmap", fr: "Une vraie feuille de route", ar: "خارطة طريق حقيقية" }, text: { en: "Follows Mohammed Abu-Hadhoud's roadmap, starting with algorithms.", fr: "Suit la roadmap de Mohammed Abu-Hadhoud, en commençant par les algorithmes.", ar: "اتباع خارطة طريق محمد أبو هدهود بدءًا بالخوارزميات." } },
-  { date: same("2023"), title: { en: "C++ deep dive", fr: "Immersion C++", ar: "التعمق في C++" }, text: { en: "13 courses (OOP, algorithms, problem solving). Console Bank & ATM systems with file persistence.", fr: "13 cours (POO, algorithmes, résolution de problèmes). Systèmes Banque & ATM en console avec fichiers.", ar: "13 دورة (البرمجة الكائنية، الخوارزميات، حل المشكلات). أنظمة بنك وصراف مع حفظ في الملفات." } },
+  { date: same("2023"), title: { en: "C++ deep dive", fr: "Immersion C++", ar: "التعمق في C++" }, text: { en: "13 courses on OOP, algorithms and problem solving.", fr: "13 cours sur la POO, les algorithmes et la résolution de problèmes.", ar: "13 دورة في البرمجة الكائنية والخوارزميات وحل المشكلات." } },
   { date: same("06/2024"), title: { en: "C# and databases", fr: "C# et bases de données", ar: "C# وقواعد البيانات" }, text: { en: "Console, WinForms, OOP, then ERD, SQL and C# + database apps.", fr: "Console, WinForms, POO, puis ERD, SQL et applications C# + BD.", ar: "الكونسول وWinForms والبرمجة الكائنية، ثم ERD وSQL وتطبيقات C# مع قواعد البيانات." } },
   { date: { en: "Coding for fun", fr: "Pour le plaisir", ar: "برمجة للمتعة" }, title: { en: "Games & management apps", fr: "Jeux & applis de gestion", ar: "ألعاب وتطبيقات إدارة" }, text: same("Adams-Gam, Flappy Bird, Memory Game, Hotel Management, Airport Management.") },
   { date: same("04/2025"), title: { en: "Starts freelancing", fr: "Début du freelance", ar: "بداية العمل الحر" }, text: { en: "Opens a Mostaql account.", fr: "Ouvre un compte Mostaql.", ar: "فتح حساب على مستقل." } },
@@ -184,20 +175,19 @@ export const services: { title: L; outcome: L; stack: string }[] = [
 ];
 
 export const skills: { group: L; items: string[]; highlight?: string[] }[] = [
-  { group: { en: "Backend", fr: "Backend", ar: "الواجهة الخلفية" }, items: ["C# / .NET Core", "Laravel (PHP)", "Python", "SignalR", "Quartz"] },
+  { group: { en: "Backend", fr: "Backend", ar: "الواجهة الخلفية" }, items: ["C# / .NET Core", "Entity Framework (EF)", "ADO.NET", "Laravel (PHP)", "Python", "SignalR", "Quartz"] },
   { group: { en: "Frontend, mobile & desktop", fr: "Frontend, mobile & desktop", ar: "الواجهة الأمامية والموبايل وسطح المكتب" }, items: ["Flutter / Dart", "React", "TypeScript", "TanStack Start", "WPF", "WinForms"], highlight: ["Flutter / Dart"] },
   { group: { en: "Databases (SQL)", fr: "Bases de données (SQL)", ar: "قواعد البيانات (SQL)" }, items: ["SQL Server", "Oracle", "MySQL", "PostgreSQL", "SQLite", "DML", "DDL", "Stored procedures"] },
   { group: { en: "Databases (NoSQL)", fr: "Bases de données (NoSQL)", ar: "قواعد البيانات (NoSQL)" }, items: ["MongoDB", "Neo4j", "Cassandra"] },
-  { group: { en: "Architecture & design", fr: "Architecture & conception", ar: "الهندسة والتصميم" }, items: ["System design", "Replication", "Scaling", "UML", "ERD", "DAL/BL patterns"] },
+  { group: { en: "Architecture & design", fr: "Architecture & conception", ar: "الهندسة والتصميم" }, items: ["SOLID principles", "Design patterns", "System design", "Replication", "Scaling", "UML", "ERD", "DAL/BL patterns"] },
   { group: { en: "DevOps & observability", fr: "DevOps & observabilité", ar: "DevOps والمراقبة" }, items: ["Docker", "Linux VPS", "IIS", "Grafana", "Prometheus", "Seq", "Serilog"] },
   { group: { en: "Tools", fr: "Outils", ar: "الأدوات" }, items: ["Postman", "Azure", "Git", "GitHub"] },
   { group: { en: "Languages", fr: "Langages", ar: "لغات البرمجة" }, items: ["C", "C++", "C#", "PHP", "Python", "TypeScript", "Dart", "SQL"] },
 ];
 
-export const spoken = same("Arabic [LEVEL] · French [LEVEL] · English [LEVEL]");
+export const spoken = same("Arabic · French · English");
 
 export const experience: { title: L; org: string; date: L; text?: L }[] = [
-  { title: { en: "Co-founder & Software Engineer", fr: "Cofondateur & ingénieur logiciel", ar: "شريك مؤسس ومهندس برمجيات" }, org: "eByte Software", date: { en: "08/2026 – now", fr: "08/2026 – aujourd'hui", ar: "08/2026 – الآن" } },
   { title: { en: "Backend Developer", fr: "Développeur backend", ar: "مطور واجهة خلفية" }, org: "Teltra Connecting Things", date: same("12/2025 – 06/2026") },
   { title: { en: "Freelance developer", fr: "Développeur freelance", ar: "مطور مستقل" }, org: "Workana · Mostaql", date: { en: "2025 – now", fr: "2025 – aujourd'hui", ar: "2025 – الآن" }, text: { en: "Including OAPAM and Dr Asmae Ghellab's practice.", fr: "Dont OAPAM et le cabinet du Dr Asmae Ghellab.", ar: "من بينها OAPAM وعيادة الدكتورة أسماء غلاب." } },
   { title: same("PFA"), org: "Collabors Impact", date: same("07/2026") },
@@ -206,13 +196,13 @@ export const experience: { title: L; org: string; date: L; text?: L }[] = [
 
 export const socials = {
   telegram: "https://t.me/mb0629",
-  whatsapp: "", // [PHONE]
+  whatsapp: "https://wa.me/212619344478",
   linkedin: "https://www.linkedin.com/in/mohammed-bourass-39538a293/",
   github: GH,
   youtube: YT,
-  workana: "", // [WORKANA_URL]
-  mostaql: "", // [MOSTAQL_URL]
+  workana: "https://www.workana.com/freelancer/cd42d270a83ed22e0f868b2268257afd",
+  mostaql: "https://mostaql.com/u/mohammed_y_brs",
 };
 // Email is split to avoid appearing as plain text in the page source.
 export const emailParts = ["srx.mbrs2004", "gmail.com"];
-export const PHOTO_URL = ""; // [PHOTO_URL]
+export const PHOTO_URL = "/Profile.webp";

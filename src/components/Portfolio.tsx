@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useI18n, type Lang } from "@/lib/i18n";
 import {
-  featured, repos, videos, timeline, services, skills, spoken, experience, socials, emailParts, PHOTO_URL, GH, YT, type Project,
+  featured, repos, timeline, services, skills, spoken, experience, socials, emailParts, PHOTO_URL, GH, YT,
 } from "@/data/projects";
 
 function useReveal() {
@@ -20,6 +20,9 @@ const btn = "inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.
 const btnPrimary = `${btn} bg-primary text-primary-foreground hover:bg-primary/85`;
 const btnGhost = `${btn} border border-border bg-card/40 text-foreground hover:border-primary/50 hover:text-primary`;
 const tag = "rounded-md border border-border bg-secondary/60 px-2 py-0.5 font-mono text-xs text-muted-foreground";
+const emailAddress = emailParts.join("@");
+const gmailComposeUrl = (subject: string, body = "") =>
+  `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(emailAddress)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
 function Section({ id, title, sub, children }: { id: string; title: string; sub?: string; children: ReactNode }) {
   return (
@@ -76,14 +79,12 @@ function Nav() {
         <div className="flex items-center gap-2">
           <LangSwitch />
           <ThemeToggle />
-          <a href="/cv.pdf" download className={`${btnPrimary} hidden px-3 py-2 sm:inline-flex`}>{t(d.cv)}</a>
           <button className="rounded-lg border border-border p-2 lg:hidden" aria-label={t(d.menu)} aria-expanded={open} onClick={() => setOpen(!open)}>≡</button>
         </div>
       </nav>
       {open && (
         <ul className="border-t border-border px-5 py-3 lg:hidden">
           {keys.map((k) => <li key={k}><a onClick={() => setOpen(false)} href={`#${k}`} className="block py-2 text-muted-foreground hover:text-primary">{t(d.nav[k])}</a></li>)}
-          <li><a href="/cv.pdf" download className={`${btnPrimary} mt-2 w-full`}>{t(d.cv)}</a></li>
         </ul>
       )}
     </header>
@@ -98,18 +99,21 @@ function Hero() {
       <div className="hero-glow pointer-events-none absolute inset-0" aria-hidden />
       <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-5 pb-24 pt-20 md:grid-cols-[1.4fr_1fr] md:pt-32">
         <div className="reveal">
-          <div className="flex flex-wrap gap-2">
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-accent/50 px-3 py-1 text-xs text-accent-foreground">
-              <span className="h-2 w-2 animate-pulse rounded-full bg-primary" />{t(d.hero.badge)}
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="inline-flex max-w-full items-center gap-3 rounded-xl border border-primary/40 bg-primary/10 px-4 py-3 text-sm font-semibold leading-snug text-foreground shadow-[0_0_30px_-12px_var(--glow)]">
+              <span className="relative flex h-3 w-3 shrink-0" aria-hidden="true">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-40" />
+                <span className="relative inline-flex h-3 w-3 rounded-full bg-primary" />
+              </span>
+              {t(d.hero.badge)}
             </span>
-            <span className="rounded-full border border-border px-3 py-1 font-mono text-xs text-muted-foreground">◉ {t(d.hero.location)}</span>
+            <span className="rounded-full border border-border bg-card/70 px-3 py-1.5 font-mono text-xs text-muted-foreground">◉ {t(d.hero.location)}</span>
           </div>
           <p className="mt-8 font-mono text-sm text-primary">Mohammed Bourass</p>
           <h1 className="mt-2 text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">{t(d.hero.title)}</h1>
           <p className="mt-6 max-w-xl text-lg text-muted-foreground">{t(d.hero.sub)}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="/cv.pdf" download className={btnPrimary}>↓ {t(d.cv)}</a>
-            <a href="#contact" className={btnGhost}>{t(d.contactMe)}</a>
+            <a href={gmailComposeUrl("Let's talk about a project")} target="_blank" rel="noreferrer" className={btnGhost}>{t(d.contactMe)}</a>
           </div>
         </div>
         <div className="reveal mx-auto w-full max-w-xs">
@@ -129,7 +133,7 @@ function About() {
   const stats = [[a.s1v, a.s1], [a.s2v, a.s2], [a.s3v, a.s3], [a.s4v, a.s4]] as const;
   return (
     <Section id="about" title={t(a.title)}>
-      <p className="reveal max-w-3xl text-lg leading-relaxed">{t(a.story)}</p>
+      <p className="reveal max-w-3xl whitespace-pre-line text-lg leading-relaxed">{t(a.story)}</p>
       <p className="reveal mt-4 font-mono text-sm text-muted-foreground">{t(a.note)}</p>
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map(([v, l], i) => (
@@ -171,54 +175,21 @@ function Roadmap() {
   );
 }
 
-function ProjectModal({ p, onClose }: { p: Project; onClose: () => void }) {
-  const { d, t } = useI18n();
-  const ref = useRef<HTMLDialogElement>(null);
-  useEffect(() => { ref.current?.showModal(); }, []);
-  return (
-    <dialog ref={ref} onClose={onClose} onClick={(e) => e.target === ref.current && onClose()}
-      className="m-auto w-[min(640px,92vw)] rounded-2xl border border-border bg-popover p-0 text-popover-foreground backdrop:bg-background/80 backdrop:backdrop-blur-sm">
-      <div className="p-6">
-        <div className="mb-5 flex aspect-video items-center justify-center rounded-lg border border-border bg-muted font-mono text-sm text-muted-foreground">
-          {p.screenshot ? <img src={p.screenshot} alt={p.name} className="h-full w-full rounded-lg object-cover" /> : t(d.projects.screenshot)}
-        </div>
-        <h3 className="text-2xl font-bold">{p.name}</h3>
-        <p className="mt-2 text-muted-foreground">{t(p.pitch)}</p>
-        <p className="mt-4 text-sm"><span className="font-mono text-primary">{t(d.projects.role)}:</span> {t(p.role)}</p>
-        <div className="mt-3 flex flex-wrap gap-2">{p.tags.map((x) => <span key={x} className={tag}>{x}</span>)}</div>
-        <h4 className="mt-5 font-mono text-xs uppercase text-primary">{t(d.projects.features)}</h4>
-        <ul className="mt-2 list-disc space-y-1 ps-5 text-sm">{p.features.map((f, i) => <li key={i}>{t(f)}</li>)}</ul>
-        {p.links.length > 0 && (
-          <div className="mt-5 flex flex-wrap gap-2">
-            {p.links.map((l) => l.url
-              ? <a key={l.label} href={l.url} target="_blank" rel="noreferrer" className={btnGhost}>{l.label} ↗</a>
-              : <span key={l.label} className={tag}>{l.label}</span>)}
-          </div>
-        )}
-        <button onClick={() => ref.current?.close()} className={`${btnPrimary} mt-6`}>{t(d.projects.close)}</button>
-      </div>
-    </dialog>
-  );
-}
-
 function Projects() {
   const { d, t } = useI18n();
-  const [sel, setSel] = useState<Project | null>(null);
   const [tab, setTab] = useState<keyof typeof repos>("mobile");
   return (
     <Section id="projects" title={t(d.projects.title)} sub={t(d.projects.sub)}>
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {featured.map((p) => (
-          <button key={p.name} onClick={() => setSel(p)}
-            className="reveal card-lift group flex flex-col rounded-xl border border-border bg-card p-5 text-start">
-            <h3 className="text-lg font-semibold group-hover:text-primary">{p.name}</h3>
+          <article key={p.name}
+            className="reveal card-lift flex flex-col rounded-xl border border-border bg-card p-5">
+            <h3 className="text-lg font-semibold">{p.name}</h3>
             <p className="mt-2 flex-1 text-sm text-muted-foreground">{t(p.pitch)}</p>
             <div className="mt-4 flex flex-wrap gap-1.5">{p.tags.map((x) => <span key={x} className={tag}>{x}</span>)}</div>
-            <span className="mt-4 font-mono text-xs text-primary">{t(d.projects.details)} →</span>
-          </button>
+          </article>
         ))}
       </div>
-      {sel && <ProjectModal p={sel} onClose={() => setSel(null)} />}
 
       <div className="mt-20">
         <div className="reveal flex flex-wrap items-end justify-between gap-4">
@@ -258,34 +229,6 @@ function Projects() {
   );
 }
 
-function YouTube() {
-  const { d, t } = useI18n();
-  return (
-    <Section id="youtube" title={t(d.yt.title)} sub={t(d.yt.sub)}>
-      <div className="reveal mb-6 flex flex-wrap items-center justify-between gap-4">
-        <p className="font-mono text-sm text-muted-foreground">eng Mohammed bourass · @mohammedBourassProjects — {t(d.yt.grid)}</p>
-        <a href={YT} target="_blank" rel="noreferrer" className={btnGhost}>{t(d.yt.visit)} ↗</a>
-      </div>
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {videos.map((v) => {
-          const inner = (
-            <>
-              <div className="aspect-video overflow-hidden rounded-t-xl bg-muted">
-                {v.id ? <img loading="lazy" src={`https://img.youtube.com/vi/${v.id}/hqdefault.jpg`} alt={t(v.title)} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                  : <div className="flex h-full items-center justify-center font-mono text-sm text-muted-foreground">{t(d.yt.noVideo)}</div>}
-              </div>
-              <p className="p-4 text-sm font-medium">{t(v.title)}</p>
-            </>
-          );
-          return v.id
-            ? <a key={v.id} href={`https://youtu.be/${v.id}`} target="_blank" rel="noreferrer" className="reveal card-lift group rounded-xl border border-border bg-card">{inner}</a>
-            : <div key={t(v.title)} className="reveal rounded-xl border border-border bg-card">{inner}</div>;
-        })}
-      </div>
-    </Section>
-  );
-}
-
 function Services() {
   const { d, t } = useI18n();
   return (
@@ -303,8 +246,12 @@ function Services() {
       <div className="reveal mt-8 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-primary/30 bg-accent/40 p-6">
         <p className="text-lg font-medium">{t(d.services.work)}</p>
         <div className="flex flex-wrap items-center gap-4">
-          <span className="font-mono text-xs text-muted-foreground">Workana [URL] · Mostaql [URL]</span>
-          <a href="#contact" className={btnPrimary}>{t(d.services.workBtn)}</a>
+          <div className="flex flex-wrap items-center gap-3 font-mono text-xs">
+            <a href={socials.workana} target="_blank" rel="noreferrer" className="text-muted-foreground underline-offset-4 hover:text-primary hover:underline">Workana ↗</a>
+            <span aria-hidden="true" className="text-border">·</span>
+            <a href={socials.mostaql} target="_blank" rel="noreferrer" className="text-muted-foreground underline-offset-4 hover:text-primary hover:underline">Mostaql ↗</a>
+          </div>
+          <a href={gmailComposeUrl("Let's talk about a project")} target="_blank" rel="noreferrer" className={btnPrimary}>{t(d.services.workBtn)}</a>
         </div>
       </div>
     </Section>
@@ -356,17 +303,16 @@ function Experience() {
 function Contact() {
   const { d, t } = useI18n();
   const c = d.contact;
-  const mail = () => emailParts.join("@");
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
-    const subject = encodeURIComponent(`Portfolio — ${f.get("name")}`);
-    const body = encodeURIComponent(`${f.get("message")}\n\n${f.get("name")} <${f.get("email")}>`);
-    window.location.href = `mailto:${mail()}?subject=${subject}&body=${body}`;
+    const subject = `Portfolio — ${f.get("name")}`;
+    const body = `${f.get("message")}\n\n${f.get("name")} <${f.get("email")}>`;
+    window.location.href = gmailComposeUrl(subject, body);
   };
   const links: [string, string][] = [
-    ["Telegram", socials.telegram], ["WhatsApp [PHONE]", socials.whatsapp], ["LinkedIn", socials.linkedin],
-    ["GitHub", socials.github], ["YouTube", socials.youtube], ["Workana [URL]", socials.workana], ["Mostaql [URL]", socials.mostaql],
+    ["Telegram", socials.telegram], ["WhatsApp", socials.whatsapp], ["LinkedIn", socials.linkedin],
+    ["GitHub", socials.github], ["YouTube", socials.youtube], ["Workana", socials.workana], ["Mostaql", socials.mostaql],
   ];
   const input = "w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm focus:border-primary focus:outline-none";
   return (
@@ -380,17 +326,10 @@ function Contact() {
         </form>
         <div className="reveal space-y-6">
           <div className="flex flex-wrap gap-3">
-            <button onClick={() => (window.location.href = `mailto:${mail()}`)} className={btnPrimary}>✉ {t(c.emailMe)}</button>
+            <a href={gmailComposeUrl("Hello Mohammed")} target="_blank" rel="noreferrer" className={btnPrimary}>✉ {t(c.emailMe)}</a>
             {links.map(([label, url]) => url
               ? <a key={label} href={url} target="_blank" rel="noreferrer" className={btnGhost}>{label}</a>
               : <span key={label} className={`${btnGhost} opacity-60`}>{label}</span>)}
-          </div>
-          <div className="rounded-xl border border-border bg-card p-6">
-            <p className="font-medium">{t(d.cv)}</p>
-            <div className="mt-3 flex flex-wrap gap-3">
-              <a href="/cv.pdf" download className={btnPrimary}>↓ {t(d.cvEn)}</a>
-              <a href="/cv-fr.pdf" download className={btnGhost}>↓ {t(d.cvFr)}</a>
-            </div>
           </div>
         </div>
       </div>
@@ -416,7 +355,7 @@ export function Portfolio() {
     <>
       <Nav />
       <main>
-        <Hero /><About /><Roadmap /><Projects /><YouTube /><Services /><Skills /><Experience /><Contact />
+        <Hero /><About /><Roadmap /><Projects /><Services /><Skills /><Experience /><Contact />
       </main>
       <Footer />
     </>

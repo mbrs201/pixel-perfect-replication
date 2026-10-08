@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Portfolio } from "@/components/Portfolio";
 import { I18nProvider } from "@/lib/i18n";
 
-const title = "Mohammed Bourass — Software Engineer & Co-founder of eByte Software";
+const title = "Mohammed Bourass — Computer Science Engineer (Génie Informatique) & Software Engineer";
 const description =
   "Backend-heavy web, desktop and mobile products with ASP.NET Core, Laravel, React and Flutter. Based in Fès, Morocco. Open to PFE internship and freelance.";
 
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/")({
           "@context": "https://schema.org",
           "@type": "Person",
           name: "Mohammed Bourass",
-          jobTitle: "Software Engineer",
+          jobTitle: "Computer Science Engineer (Génie Informatique) and Software Engineer",
           worksFor: { "@type": "Organization", name: "eByte Software" },
           alumniOf: "ENSAF",
           address: { "@type": "PostalAddress", addressLocality: "Fès", addressCountry: "MA" },
